@@ -12,13 +12,21 @@ import worlds.World;
 
 public class Agent extends UniqueDynamicObject{
 	
+	boolean alive;
+	
 	public Agent ( int __x , int __y, World __world )
 	{
 		super(__x,__y,__world);
+		
+		alive = true;
 	}
 	
 	public void step() 
 	{
+		if (!this.estVivant()) {
+			world.getUniqueDynObject().remove(this);
+			return;
+		}
 		if ( world.getIteration() % 20 == 0 )
 		{
 			double dice = Math.random();
@@ -47,9 +55,9 @@ public class Agent extends UniqueDynamicObject{
     	int y2 = (y-(offsetCA_y%myWorld.getHeight()));
     	if ( y2 < 0) y2+=myWorld.getHeight();
 
-    	float height = Math.max ( 0 , (float)myWorld.getCellHeight(x, y) );
+    	//float height = Math.max ( 0 , (float)myWorld.getCellHeight(x, y) );
     	
-        gl.glColor3f(1.f,1.f,1.f);
+        /*gl.glColor3f(1.f,1.f,1.f);
         gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight);
         gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight + 4.f);
         gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight + 4.f);
@@ -77,6 +85,6 @@ public class Agent extends UniqueDynamicObject{
         gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight + 5.f);
         gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY+lenY, height*normalizeHeight + 5.f);
         gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY+lenY, height*normalizeHeight + 5.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight + 5.f);
+        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight + 5.f);*/
     }
 }

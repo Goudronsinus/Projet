@@ -26,21 +26,33 @@ public class WorldOfTrees extends World {
 
 	        	float height = (float) this.getCellHeight(x, y);
 		    	
-		        if ( height >= 0 )
+		        if ( height >= 0.1*this.getMaxEverHeight()  && height <= 0.25*this.getMaxEverHeight()  )
 		        {
-		        	// snowy mountains
-		        	/*
-		        	color[0] = height / (float)this.getMaxEverHeight();
-					color[1] = height / (float)this.getMaxEverHeight();
-					color[2] = height / (float)this.getMaxEverHeight();
-					/**/
-		        	
-					// green mountains
+		        	// green mountains
 		        	/**/
 		        	color[0] = height / ( (float)this.getMaxEverHeight() );
 					color[1] = 0.9f + 0.1f * height / ( (float)this.getMaxEverHeight() );
 					color[2] = height / ( (float)this.getMaxEverHeight() );
 					/**/
+		        						
+		        }
+		        else if (height > 0.25*this.getMaxEverHeight() )
+		        {
+		        	// snowy mountains
+		        	
+		        	color[0] = height / (float)this.getMaxEverHeight();
+					color[1] = height / (float)this.getMaxEverHeight();
+					color[2] = height / (float)this.getMaxEverHeight();
+					/**/
+		        }
+		        else if (height >= 0 && height < 0.1*this.getMaxEverHeight() )
+		        {
+		        	//sand
+		        	/**/
+		        	color[0] = 0.7f + 0.1f * height / ( (float)this.getMaxEverHeight() );
+		        	color[1] = 0.7f + 0.1f * height / ( (float)this.getMaxEverHeight() );
+		        	color[2] = 0.5f + 0.1f * height / ( (float)this.getMaxEverHeight() );
+		        	/**/
 		        }
 		        else
 		        {
@@ -55,15 +67,21 @@ public class WorldOfTrees extends World {
     	// add some objects
     	for ( int i = 0 ; i < 11 ; i++ )
     	{
-    		if ( i%10 == 0 )
+    		//if ( i%10 == 0 )
     			uniqueObjects.add(new Monolith(110,110+i,this));
-    		else
+    		//else
     			uniqueObjects.add(new BridgeBlock(110,110+i,this));
+    			uniqueObjects.add(new Cloud(56, 56+i, this));
     	}
-    	
-    	uniqueDynamicObjects.add(new Agent(64,64,this));
+    	for (int i = 0 ; i < 12 ; i++)
+    		uniqueDynamicObjects.add(new Predator1((int)(Math.random()*super.dxCA),(int)(Math.random()*super.dyCA),this));
+    		uniqueDynamicObjects.add(new Prey1((int)(Math.random()*super.dxCA),(int)(Math.random()*super.dyCA),this));
     	
     }
+    
+    /*public double getMaxEverHeight(){
+    	return this.getMaxEverHeight();
+    }*/
     
     protected void initCellularAutomata(int __dxCA, int __dyCA, double[][] landscape)
     {
@@ -108,6 +126,7 @@ public class WorldOfTrees extends World {
 		case 3:
 			Tree.displayObjectAt(_myWorld,gl,cellState, x, y, height, offset, stepX, stepY, lenX, lenY, normalizeHeight);
 		default:
+			
 			// nothing to display at this location.
 		}
 	}

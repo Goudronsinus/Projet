@@ -28,9 +28,29 @@ public class ForestCA extends CellularAutomataInteger {
 		for ( int x = 0 ; x != _dx ; x++ )
     		for ( int y = 0 ; y != _dy ; y++ )
     		{
-    			if ( _cellsHeightValuesCA.getCellState(x,y) >= 0 )
+    			/*if ( _cellsHeightValuesCA.getCellState(x,y) >= 0.1 * world.getMaxEverHeight() && _cellsHeightValuesCA.getCellState(x,y) <= 0.35*world.getMaxEverHeight())
     			{
     				if ( Math.random() < 0.53 ) // was: 0.71
+    					this.setCellState(x, y, 1); // tree
+    				else
+    					this.setCellState(x, y, 0); // empty
+    			}
+    			else if ( _cellsHeightValuesCA.getCellState(x,y) > 0.35*world.getMaxEverHeight() && _cellsHeightValuesCA.getCellState(x,y) <= 0.6*world.getMaxEverHeight())
+    			{
+    				if ( Math.random() < 0.23 ) // was: 0.53
+    					this.setCellState(x, y, 1); // tree
+    				else
+    					this.setCellState(x,y,0); // empty
+    			}
+    			else
+    			{
+    				this.setCellState(x, y, -1); // water (ignore)
+    			}*/
+
+    			if ( _cellsHeightValuesCA.getCellState(x,y) >= 0.1 * world.getMaxEverHeight()
+    					&& _cellsHeightValuesCA.getCellState(x,y) <= 0.9*world.getMaxEverHeight())
+    			{
+    				if ( Math.random() >= _cellsHeightValuesCA.getCellState(x,y) * 20*world.getMaxEverHeight() ) // was: 0.71
     					this.setCellState(x, y, 1); // tree
     				else
     					this.setCellState(x, y, 0); // empty
@@ -39,6 +59,7 @@ public class ForestCA extends CellularAutomataInteger {
     			{
     				this.setCellState(x, y, -1); // water (ignore)
     			}
+    			
     		}
     	this.swapBuffer();
 
