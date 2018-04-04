@@ -15,6 +15,8 @@ import javax.media.opengl.fixedfunc.*;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import applications.simpleworld.WorldOfTrees;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
@@ -155,7 +157,6 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
         {
        		dxView = landscape.length;
     		dyView = landscape[0].length;
-
     		System.out.println("Landscape contains " + dxView*dyView + " tiles. (" + dxView + "x" + dyView +")");
         	
     		_myWorld.init(dxView-1,dyView-1,landscape);
@@ -184,6 +185,7 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
         {
     		caps = new GLCapabilities(null); //!n
     		caps.setDoubleBuffered(true);  //!n
+    		
     		
     		final GLCanvas canvas = new GLCanvas(caps); // original
     		
@@ -239,7 +241,6 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
                 gl.glEnable(GL.GL_DEPTH_TEST);
                 gl.glDepthFunc(GL.GL_LEQUAL);
                 gl.glHint(GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-                
                 // Culling - display only triangles facing the screen
                 gl.glCullFace(GL.GL_FRONT);
                 gl.glEnable(GL.GL_CULL_FACE);
@@ -267,6 +268,7 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
         			{
 	        			System.out.print("frames per second  : "+fps+" ; ");
 	        			System.out.println();
+	        			System.out.println(_myWorld.getNomSaison() + "  " + _myWorld.nbJourSaison());
         			}
         			
         			lastItStamp = it;
@@ -301,20 +303,30 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
                
                 if ( MY_LIGHT_RENDERING )
                 {
+                	float SHINE_ALL_DIRECTIONS = 1;
+                	float[] lightPos = {0.f, 40.f, -100.f, SHINE_ALL_DIRECTIONS};
+                	float[] lightColorAmbient = {0.2f, 0.2f, 0.2f, 0.1f};
+                	float[] lightColorSpecular = {0.8f, 0.8f, 0.8f, 1f};
+                	
 	            	// Prepare light parameters.
-	                float SHINE_ALL_DIRECTIONS = 1;
+	                
 	                //float[] lightPos = {120.f, 120.f, -200.f, SHINE_ALL_DIRECTIONS};
 	                //float[] lightPos = {40.f, 0.f, -300.f, SHINE_ALL_DIRECTIONS};
-	                float[] lightPos = {0.f, 40.f, -100.f, SHINE_ALL_DIRECTIONS};
+	                
 	                //float[] lightColorAmbient = {0.2f, 0.2f, 0.2f, 1f};
-	                float[] lightColorAmbient = {0.5f, 0.5f, 0.5f, 1f};
-	                float[] lightColorSpecular = {0.8f, 0.8f, 0.8f, 1f};
 	
 	                // Set light parameters.
+	                if(_myWorld.getJour()) {
+	                	gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos, 0);
+	                	gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
+	                	gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, lightColorSpecular, 0);
+	                	gl.glClearColor(0.1f, 0.4f, 0.7f, 1.f);
+	                }
 	                
-	                gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos, 0);
-	                gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
-	                gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, lightColorSpecular, 0);
+	                else {
+	                	float [] lightNuit= {0.5f,0.6f, 0.8f,1.f};
+	                	gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightNuit, 0);
+	                }
 	                
 	                // Enable lighting in GL.
 	                gl.glEnable(GL2.GL_LIGHT1);
@@ -392,17 +404,40 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
 	                	// compute CA-based coloring
 
                         gl.glColor3f(color[0],color[1],color[2]);
-                        
+                        float[] colorJour  = {0.2f,0.2f,0.5f,1.0f};
                         // * if light is on
 	                	if ( MY_LIGHT_RENDERING )
                         {
-	                        gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0 );
-	                        gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0 );
-	                        gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, color, 0 );
-	                        gl.glMateriali( GL.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 4 );
-	                        float[] colorBlack  = {0.0f,0.0f,0.0f,1.0f};
+	                		//if(_myWorld.getDay()) {
+	                		 gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0 );
+		                     gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0 );
+		                     gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, color, 0 );
+		                     gl.glMateriali( GL.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 4 );
+		                     gl.glMaterialfv(GL.GL_BACK, GL2.GL_3D_COLOR, colorJour,0);
+		                    /*gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_EMISSION, colorJour, 0 );
+		                    gl.glColor3f(0.8f, 0.1f, 0.1f);
+	                		}
+	                		else {
+		                    	 float[] colorNuit  = {0.5f,0.5f,0.8f,1.0f};
+		                    	 gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, color, 0);
+		                    	 gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, color, 0 );
+			                     gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, color, 0 );
+			                     gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_EMISSION, colorNuit, 0 );
+		                     }*/
+			                     
+		                    	 
+		                     
+	                		/*if(WorldOfTrees..equals("Nuit")) {
+	          
+	                       
+	                        float[] colorNuit  = {0.5f,0.5f,0.8f,1.0f};
 	                        
-	                        gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_EMISSION, colorBlack, 0 );
+	                        gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_EMISSION, colorNuit, 0 );
+	                		}
+	                		else {
+	                			
+	                			gl.glMaterialfv( GL.GL_FRONT_AND_BACK, GL2.GL_EMISSION, colorJour, 0 );
+	                		}*/
                         }
                         
                         // Border visual smoothing : smooth altitudes near border (i.e. nicer rendering)
@@ -492,7 +527,11 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
         
 
         
- 
+        public void setLightAmbient(GLAutoDrawable gl, float r, float g, float b) {
+        	float [] lightColorAmbient = {r, g, b, 1.f};
+        	GL2 gl2 = gl.getGL().getGL2();
+        	gl2.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
+        }
         
         /**
          * 

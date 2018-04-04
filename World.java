@@ -6,7 +6,8 @@ package worlds;
 
 import java.util.ArrayList;
 import javax.media.opengl.GL2;
-
+import climat.*;
+import graphics.Landscape;
 import cellularautomata.*;
 
 import objects.*;
@@ -14,13 +15,13 @@ import objects.*;
 public abstract class World {
 	
 	protected int iteration = 0;
-
+	protected Saison saison;
 	protected ArrayList<UniqueObject> uniqueObjects = new ArrayList<UniqueObject>();
 	protected ArrayList<UniqueDynamicObject> uniqueDynamicObjects = new ArrayList<UniqueDynamicObject>();
     
 	protected int dxCA;
 	protected int dyCA;
-
+	
 	protected int indexCA;
 
 	//protected CellularAutomataInteger cellularAutomata; // TO BE DEFINED IN CHILDREN CLASSES
@@ -44,7 +45,7 @@ public abstract class World {
     	dyCA = __dyCA;
     	
     	iteration = 0;
-
+    	saison = new Saison(Saison.saisons[0]);
     	this.cellsHeightValuesCA = new CellularAutomataDouble (__dxCA,__dyCA,false);
     	this.cellsHeightAmplitudeCA = new CellularAutomataDouble (__dxCA,__dyCA,false);
     	
@@ -91,6 +92,7 @@ public abstract class World {
     {
     	stepCellularAutomata();
     	stepAgents();
+    	saison.setSaison();
     	iteration++;
     }
     
@@ -143,6 +145,21 @@ public abstract class World {
     		uniqueObjects.get(i).displayUniqueObject(_myWorld,gl,offsetCA_x,offsetCA_y,offset,stepX,stepY,lenX,lenY,normalizeHeight);
     	for ( int i = 0 ; i < uniqueDynamicObjects.size(); i++ )
     		uniqueDynamicObjects.get(i).displayUniqueObject(_myWorld,gl,offsetCA_x,offsetCA_y,offset,stepX,stepY,lenX,lenY,normalizeHeight);
+	}
+	
+	
+	
+	public String getNomSaison() {
+		return saison.getNomSaison();
+	}
+	public int nbJourSaison() {
+		return saison.getNbJour();
+	}
+	public boolean getJour(){
+		return saison.getDay().getJour();
+	}
+	public Day getDay() {
+		return saison.getDay();
 	}
     
 	public int getWidth() { return dxCA; }
