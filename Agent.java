@@ -1,7 +1,3 @@
-// ### WORLD OF CELLS ### 
-// created by nicolas.bredeche(at)upmc.fr
-// date of creation: 2013-1-12
-
 package applications.simpleworld;
 
 import javax.media.opengl.GL2;
@@ -10,7 +6,7 @@ import objects.UniqueDynamicObject;
 
 import worlds.World;
 
-public class Agent extends UniqueDynamicObject{
+public abstract class Agent extends UniqueDynamicObject{
 	
 	boolean alive;
 	
@@ -21,13 +17,13 @@ public class Agent extends UniqueDynamicObject{
 		alive = true;
 	}
 	
-	public void step() 
-	{
+	public abstract void step(); 
+	/*{
 		if (!this.estVivant()) {
 			world.getUniqueDynObject().remove(this);
 			return;
 		}
-		if ( world.getIteration() % 20 == 0 )
+		if ( world.getIteration() % 5 == 0 )
 		{
 			double dice = Math.random();
 			if ( dice < 0.25 )
@@ -41,50 +37,38 @@ public class Agent extends UniqueDynamicObject{
 					else
 						this.y = ( this.y - 1 +  this.world.getHeight() ) % this.world.getHeight() ;
 		}
+	} */
+	
+	public double distance(Agent a) {
+		return Math.sqrt(Math.pow(2,(this.x - a.x)) + Math.pow(2, (this.y - a.y)));
+	}
+	
+	public Agent PlusProcheVoisin(World _w) {
+		Agent voisin = null;
+		double dist_min = Double.POSITIVE_INFINITY;		
+		for (UniqueDynamicObject agent : _w.getUniqueDynObject()) {
+			if (dist_min > this.distance((Agent) agent)) {
+				dist_min = this.distance((Agent) agent);
+				voisin = (Agent)agent;
+			}
+		}
+		return voisin;
 	}
 
-    public void displayUniqueObject(World myWorld, GL2 gl, int offsetCA_x, int offsetCA_y, float offset, float stepX, float stepY, float lenX, float lenY, float normalizeHeight)
-    {
+    public abstract void displayUniqueObject(World myWorld, GL2 gl, int offsetCA_x, int offsetCA_y, float offset, float stepX, float stepY, float lenX, float lenY, float normalizeHeight);
+   // {
 
         // display a monolith
         
         //gl.glColor3f(0.f+(float)(0.5*Math.random()),0.f+(float)(0.5*Math.random()),0.f+(float)(0.5*Math.random()));
         
-    	int x2 = (x-(offsetCA_x%myWorld.getWidth()));
+    	/*int x2 = (x-(offsetCA_x%myWorld.getWidth()));
     	if ( x2 < 0) x2+=myWorld.getWidth();
     	int y2 = (y-(offsetCA_y%myWorld.getHeight()));
     	if ( y2 < 0) y2+=myWorld.getHeight();
-
+		*/
     	//float height = Math.max ( 0 , (float)myWorld.getCellHeight(x, y) );
     	
-        /*gl.glColor3f(1.f,1.f,1.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight);
 
-        gl.glColor3f(1.f,1.f,1.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY+lenY, height*normalizeHeight);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY+lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY+lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY+lenY, height*normalizeHeight);
-        
-        gl.glColor3f(1.f,1.f,1.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY+lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY+lenY, height*normalizeHeight);
-
-        gl.glColor3f(1.f,1.f,1.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY+lenY, height*normalizeHeight);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY+lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight + 4.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight);
-
-        gl.glColor3f(1.0f,1.f,0.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY-lenY, height*normalizeHeight + 5.f);
-        gl.glVertex3f( offset+x2*stepX-lenX, offset+y2*stepY+lenY, height*normalizeHeight + 5.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY+lenY, height*normalizeHeight + 5.f);
-        gl.glVertex3f( offset+x2*stepX+lenX, offset+y2*stepY-lenY, height*normalizeHeight + 5.f);*/
-    }
+   // }
 }

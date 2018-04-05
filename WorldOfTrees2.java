@@ -9,9 +9,9 @@ import javax.media.opengl.GL2;
 import objects.*;
 import worlds.World;
 
-public class WorldOfTrees extends World {
+public class WorldOfTrees2 extends World {
 
-    protected ForestCA2 cellularAutomata;
+    protected ForestCA cellularAutomata;
 
     public void init ( int __dxCA, int __dyCA, double[][] landscape )
     {
@@ -26,7 +26,7 @@ public class WorldOfTrees extends World {
 
 	        	float height = (float) this.getCellHeight(x, y);
 		    	
-		        if ( height >= 0.2*this.getMaxEverHeight()  && height <= 0.45*this.getMaxEverHeight()  )
+		        if ( height >= 0.1*this.getMaxEverHeight()  && height <= 0.25*this.getMaxEverHeight()  )
 		        {
 		        	// green mountains
 		        	/**/
@@ -34,9 +34,10 @@ public class WorldOfTrees extends World {
 					color[1] = 0.9f + 0.1f * height / ( (float)this.getMaxEverHeight() );
 					color[2] = height / ( (float)this.getMaxEverHeight() );
 					/**/
+					setCellValue(x,y,-3);
 		        						
 		        }
-		        else if (height > 0.45*this.getMaxEverHeight() )
+		        else if (height > 0.25*this.getMaxEverHeight() )
 		        {
 		        	// snowy mountains
 		        	
@@ -44,14 +45,16 @@ public class WorldOfTrees extends World {
 					color[1] = height / (float)this.getMaxEverHeight();
 					color[2] = height / (float)this.getMaxEverHeight();
 					/**/
+					setCellValue(x,y,-4);
 		        }
-		        else if (height >= 0 && height < 0.2*this.getMaxEverHeight() )
+		        else if (height >= 0 && height < 0.1*this.getMaxEverHeight() )
 		        {
 		        	//sand
 		        	/**/
 		        	color[0] = 0.7f + 0.1f * height / ( (float)this.getMaxEverHeight() );
 		        	color[1] = 0.7f + 0.1f * height / ( (float)this.getMaxEverHeight() );
 		        	color[2] = 0.5f + 0.1f * height / ( (float)this.getMaxEverHeight() );
+		        	setCellValue(x, y, -1);
 		        	/**/
 		        }
 		        else
@@ -60,6 +63,7 @@ public class WorldOfTrees extends World {
 					color[0] = -height;
 					color[1] = -height;
 					color[2] = 1.f;
+					setCellValue(x, y, -2);
 		        }
 		        this.cellsColorValues.setCellState(x, y, color);
     		}
@@ -67,20 +71,25 @@ public class WorldOfTrees extends World {
     	// add some objects
     	for ( int i = 0 ; i < 11 ; i++ )
     	{
-    		if ( i%10 == 0 )
-    			uniqueObjects.add(new Monolith(110,110+i,this));
-    		else
-    			uniqueObjects.add(new BridgeBlock(110,110+i,this));
+    		//if ( i%10 == 0 )
+    		//	uniqueObjects.add(new Monolith(110,110+i,this));
+    		//else
+    		//	uniqueObjects.add(new BridgeBlock(110,110+i,this));
+    			//uniqueObjects.add(new Cloud(56, 56+i, this));
     	}
-    	for (int i = 0; i < 7 ; i++ ){
-    		uniqueDynamicObjects.add(new Prey((int)(Math.random()*__dxCA), (int)(Math.random()*__dyCA),this));
-    		uniqueDynamicObjects.add(new Predator((int)(Math.random()*__dxCA),(int)(Math.random()*__dyCA),this));
-    	}
+    	/*for (int i = 0 ; i < 12 ; i++)
+    		uniqueDynamicObjects.add(new Predator1((int)(Math.random()*super.dxCA),(int)(Math.random()*super.dyCA),this));
+    		uniqueDynamicObjects.add(new Prey1((int)(Math.random()*super.dxCA),(int)(Math.random()*super.dyCA),this));
+    	*/
     }
+    
+    /*public double getMaxEverHeight(){
+    	return this.getMaxEverHeight();
+    }*/
     
     protected void initCellularAutomata(int __dxCA, int __dyCA, double[][] landscape)
     {
-    	cellularAutomata = new ForestCA2(this,__dxCA,__dyCA,cellsHeightValuesCA);
+    	cellularAutomata = new ForestCA(this,__dxCA,__dyCA,cellsHeightValuesCA);
     	cellularAutomata.init();
     }
     
@@ -93,7 +102,6 @@ public class WorldOfTrees extends World {
     protected void stepAgents()
     {
     	// nothing to do.
-    	if( iteration % 50 == 0)
     	for ( int i = 0 ; i < this.uniqueDynamicObjects.size() ; i++ )
     	{
     		this.uniqueDynamicObjects.get(i).step();
@@ -120,10 +128,9 @@ public class WorldOfTrees extends World {
 		case 1: // trees: green, fire, burnt
 		case 2:
 		case 3:
-			Tree.displayObjectAt(_myWorld,gl, cellState, x, y, height, offset, stepX, stepY, lenX, lenY, normalizeHeight);
-		//case 5:
-			//Ble.displayObjectAt(_myWorld, gl, cellState, x, y, height, offset, stepX, stepY, lenX, lenY, normalizeHeight);
+			Tree.displayObjectAt(_myWorld,gl,cellState, x, y, height, offset, stepX, stepY, lenX, lenY, normalizeHeight);
 		default:
+			
 			// nothing to display at this location.
 		}
 	}
