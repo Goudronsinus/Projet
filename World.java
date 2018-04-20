@@ -18,16 +18,19 @@ public abstract class World {
 	protected Saison saison;
 	protected ArrayList<UniqueObject> uniqueObjects = new ArrayList<UniqueObject>();
 	protected ArrayList<UniqueDynamicObject> uniqueDynamicObjects = new ArrayList<UniqueDynamicObject>();
-    
 	protected int dxCA;
 	protected int dyCA;
+	protected static double probaIncendie = 0.00001;
+	protected static double probaRepousse = 0.001;
 	
 	protected int indexCA;
+	protected int indexSaison;
 
 	//protected CellularAutomataInteger cellularAutomata; // TO BE DEFINED IN CHILDREN CLASSES
     
 	protected CellularAutomataDouble cellsHeightValuesCA;
 	protected CellularAutomataDouble cellsHeightAmplitudeCA;
+	protected boolean [][] majCells; 
 	
 	public CellularAutomataColor cellsColorValues;
 
@@ -45,9 +48,10 @@ public abstract class World {
     	dyCA = __dyCA;
     	
     	iteration = 0;
-    	saison = new Saison(Saison.saisons[0]);
-    	this.cellsHeightValuesCA = new CellularAutomataDouble (__dxCA,__dyCA,false);
-    	this.cellsHeightAmplitudeCA = new CellularAutomataDouble (__dxCA,__dyCA,false);
+    	saison = new Printemps("Printemps", this);
+    	this.cellsHeightValuesCA = new CellularAutomataDouble(__dxCA,__dyCA,false);
+    	this.cellsHeightAmplitudeCA = new CellularAutomataDouble(__dxCA,__dyCA,false);
+    	majCells = new boolean [__dxCA][__dyCA];
     	
     	this.cellsColorValues = new CellularAutomataColor(__dxCA,__dyCA,false);
     	
@@ -90,10 +94,13 @@ public abstract class World {
     
     public void step()
     {
+    	
     	stepCellularAutomata();
     	stepAgents();
-    	saison.setSaison();
-    	iteration++;
+    	saison.stepSaison();
+    	//System.out.println(saison.getToday().dayTime() + "  "+saison.getToday().getJour());
+    	
+       	iteration++;
     }
     
     public int getIteration()
@@ -116,7 +123,19 @@ public abstract class World {
     abstract public void setCellValue(int x, int y, int state);
     
     // ---- 
+    public static double getProbaInc() {
+    	return probaIncendie;
+    }
+    public void setProbaInc(double p) {
+    	probaIncendie = p;
+    }
     
+    public static double getProbaRep() {
+    	return probaRepousse;
+    }
+    public void setPobaRep(double p) {
+    	probaRepousse = p;
+    }
     public double getCellHeight(int x, int y) // used by the visualization code to set correct height values
     {
     	return cellsHeightValuesCA.getCellState(x%dxCA,y%dyCA);
@@ -156,12 +175,27 @@ public abstract class World {
 		return saison.getNbJour();
 	}
 	public boolean getJour(){
-		return saison.getDay().getJour();
+		return saison.getToday().getJour();
 	}
-	public Day getDay() {
-		return saison.getDay();
+	public Day[] getDay() {
+		return saison.getSaisDay();
 	}
-    
+	
+	public boolean getMajState(int x, int y) {
+		return majCells[x][y];
+	}
+	public void setMajState(int x, int y) {
+		majCells[x][y] = !majCells[x][y];
+	}
+	public int getIndexSais() {
+		return indexSaison;
+	}
+	public void setIndexSais() {
+		indexSaison = (indexSaison + 1) %4;
+	}
+    public void setSais(Saison a) {
+    	saison = a;
+    }
 	public int getWidth() { return dxCA; }
 	public int getHeight() { return dxCA; }
 

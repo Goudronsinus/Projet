@@ -16,6 +16,7 @@ import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import applications.simpleworld.WorldOfTrees;
+import climat.Saison;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
@@ -268,7 +269,7 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
         			{
 	        			System.out.print("frames per second  : "+fps+" ; ");
 	        			System.out.println();
-	        			System.out.println(_myWorld.getNomSaison() + "  " + _myWorld.nbJourSaison());
+	        			System.out.println(_myWorld.getNomSaison() + "  " + _myWorld.nbJourSaison()+ " " + _myWorld.getJour());
         			}
         			
         			lastItStamp = it;
@@ -326,6 +327,7 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
 	                else {
 	                	float [] lightNuit= {0.5f,0.6f, 0.8f,1.f};
 	                	gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightNuit, 0);
+	                	gl.glClearColor(0.3f,0.4f, 0.9f,1.f);
 	                }
 	                
 	                // Enable lighting in GL.
@@ -523,14 +525,6 @@ public class Landscape implements GLEventListener, KeyListener, MouseListener{
             	//gLDrawable.swapBuffers(); // GO FAST ???  // should be done at the end (http://stackoverflow.com/questions/1540928/jogl-double-buffering)
             	
 
-        }
-        
-
-        
-        public void setLightAmbient(GLAutoDrawable gl, float r, float g, float b) {
-        	float [] lightColorAmbient = {r, g, b, 1.f};
-        	GL2 gl2 = gl.getGL().getGL2();
-        	gl2.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
         }
         
         /**
