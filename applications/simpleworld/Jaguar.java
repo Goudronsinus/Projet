@@ -16,17 +16,6 @@ public class Jaguar extends Predator {
 		
 		super(x, y, _w);
 		
-		/*if (_w.getCellValue(this.x, this.y) == -1) {
-			for (int i = 0; i < _w.getHeight(); i++) {
-				for (int j = 0; j < _w.getWidth(); j++) {
-					if (_w.getCellValue(i, j) != -1) {
-						this.x = i;
-						this.y = j;
-					}
-				}
-			}
-		}*/
-		
 	}
 	
 	public void chasse(World _w) {
@@ -41,6 +30,10 @@ public class Jaguar extends Predator {
 					this.recuperation_fatigue(MAX_FATIGUE);
 				}
 			}
+			if (a instanceof Humain && a.getX() == this.getX() && a.getY() == this.getY()) {
+				System.out.println("Jaguar a ete mange");
+				this.mort();
+			}
 		}
 		this.perte_fatigue();
 	}
@@ -51,7 +44,6 @@ public class Jaguar extends Predator {
 		for (UniqueDynamicObject a : listeAgents){
 			if (a instanceof Jaguar){
 				if (a.getX() == this.getX() && a.getY() == this.getY() && this.male != ((Jaguar)a).male){
-					System.out.println("Deux Jaguar en ["+this.getX()+", "+this.getY()+"] ; \t nb_tour = "+nb_tour);
 					nb_tour++;
 				}
 				if (nb_tour >= 3) {

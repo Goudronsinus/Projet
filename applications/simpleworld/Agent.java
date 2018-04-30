@@ -32,26 +32,6 @@ public abstract class Agent extends UniqueDynamicObject{
 	}
 	
 	public abstract void step(); 
-	/*{
-		if (!this.estVivant()) {
-			world.getUniqueDynObject().remove(this);
-			return;
-		}
-		if ( world.getIteration() % 5 == 0 )
-		{
-			double dice = Math.random();
-			if ( dice < 0.25 )
-				this.x = ( this.x + 1 ) % this.world.getWidth() ;
-			else
-				if ( dice < 0.5 )
-					this.x = ( this.x - 1 +  this.world.getWidth() ) % this.world.getWidth() ;
-				else
-					if ( dice < 0.75 )
-						this.y = ( this.y + 1 ) % this.world.getHeight() ;
-					else
-						this.y = ( this.y - 1 +  this.world.getHeight() ) % this.world.getHeight() ;
-		}
-	} */
 	
 	public void perte_fatigue() {
 		fatigue = fatigue--;
@@ -60,14 +40,6 @@ public abstract class Agent extends UniqueDynamicObject{
 	public void perte_energie() {
 		energie--;
 	}
-	
-	/*public int etat_fatigue() {
-		return fatigue;
-	}
-	
-	public int etat_energie() {
-		return energie;
-	}*/
 	
 	public void recuperation_fatigue(int fat) {
 		fatigue = (fatigue + fat)%(MAX_FATIGUE+2);
@@ -89,27 +61,9 @@ public abstract class Agent extends UniqueDynamicObject{
 				dist_min = this.distance((Agent) agent);
 				voisin = (Agent)agent;
 			}
-			//else {
-			//	voisin = null;
-			//}
 		}
 		return voisin;
 	}
 
     public abstract void displayUniqueObject(World myWorld, GL2 gl, int offsetCA_x, int offsetCA_y, float offset, float stepX, float stepY, float lenX, float lenY, float normalizeHeight);
-   // {
-
-        // display a monolith
-        
-        //gl.glColor3f(0.f+(float)(0.5*Math.random()),0.f+(float)(0.5*Math.random()),0.f+(float)(0.5*Math.random()));
-        
-    	/*int x2 = (x-(offsetCA_x%myWorld.getWidth()));
-    	if ( x2 < 0) x2+=myWorld.getWidth();
-    	int y2 = (y-(offsetCA_y%myWorld.getHeight()));
-    	if ( y2 < 0) y2+=myWorld.getHeight();
-		*/
-    	//float height = Math.max ( 0 , (float)myWorld.getCellHeight(x, y) );
-    	
-
-   // }
 }

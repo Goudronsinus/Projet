@@ -81,23 +81,33 @@ public class WorldOfTrees extends World {
     	int cptR = 0;
     	int cptP = 0;
     	int cptJ = 0;
+    	int cptT = 0;
+    	int cptH = 0;
     	for (int x = 0; x < __dxCA ; x++) {
     		for (int y = 0; y < __dyCA ; y++) {
     			if (this.getCellValue(x, y) == -1) {
-    				if (cptR != 6 && Math.random() >= 0.5) {
+    				if (cptR <= 6 && Math.random() >= 0.5) {
     					uniqueDynamicObjects.add(new Requin(x, y, this));
     					cptR++;
     				}
-    				else if (cptP != 6 && Math.random() >= 0.5) {
+    				else if (cptP <= 6 && Math.random() >= 0.5) {
     					uniqueDynamicObjects.add(new Poisson(x, y, this));
     					cptP++;
     				}
     			}
     			else {
-    				if (cptJ != 6 && Math.random() >= 0.5) {
+    				if (cptJ <= 6 && Math.random() >= 0.5) {
     					uniqueDynamicObjects.add(new Jaguar(x, y, this));
     					cptJ++;
     				}
+    				if (cptT <= 6 && Math.random() >= 0.5) {
+    					uniqueDynamicObjects.add(new Tortue(x, y, this));
+    					cptT++;
+    				}
+    			}
+    			if (cptH <= 2 && Math.random() >= 0.7) {
+    				uniqueDynamicObjects.add(new Humain(x, y, this));
+    				cptH ++;
     			}
     		}
     	}

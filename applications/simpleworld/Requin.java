@@ -30,6 +30,10 @@ public class Requin extends Predator {
 					this.recuperation_fatigue(MAX_FATIGUE);
 				}
 			}
+			if (a instanceof Humain && a.getX() == this.getX() && a.getY() == this.getY()) {
+				System.out.println("Requin a ete mangé");
+				this.mort();
+			}
 		}
 		this.perte_fatigue();
 	}
@@ -41,7 +45,6 @@ public class Requin extends Predator {
 		for (UniqueDynamicObject a : listeAgents){
 			if (a instanceof Requin){
 				if (a.getX() == this.getX() && a.getY() == this.getY() && this.male != ((Requin)a).male){
-					System.out.println("Deux Requin en ["+this.getX()+", "+this.getY()+"] ; \t nb_tour = "+nb_tour);
 					nb_tour++;
 				}			
 				if (nb_tour >= 5 && Math.random() >= 0.75) {
@@ -58,7 +61,7 @@ public class Requin extends Predator {
 	public void deplacement() {
 		int maxWidth = super.world.getWidth();
 		int maxHeight = super.world.getHeight();
-		Agent voisin = this.PlusProcheVoisin(20, super.world);
+		Agent voisin = this.PlusProcheVoisin(10, super.world);
 		this.chasse(super.world);
 		this.reproduction(super.world);
 		

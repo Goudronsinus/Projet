@@ -16,9 +16,8 @@ public class Tortue extends Prey{
 		ArrayList<UniqueDynamicObject> listeAgents = _w.getUniqueDynObject();
 		
 		for (UniqueDynamicObject a : listeAgents){
-			if (a instanceof Jaguar){
+			if (a instanceof Jaguar || a instanceof Humain){
 				if (a.getX() == this.getX() && a.getY() == this.getY() ){
-					System.out.println("Tortue a été mangée par Jaguar");
 					this.mort();
 				}
 			}
@@ -32,7 +31,6 @@ public class Tortue extends Prey{
 		for (UniqueDynamicObject a : listeAgents){
 			if (a instanceof Tortue){
 				if (a.getX() == this.getX() && a.getY() == this.getY() && this.male != ((Tortue) a).male){
-					System.out.println("Deux tortues en ["+this.getX()+", "+this.getY()+"] ; \t nb_tour = "+nb_tour);
 					nb_tour++;
 				}
 			

@@ -17,9 +17,8 @@ public class Poisson extends Prey{
 		ArrayList<UniqueDynamicObject> listeAgents = _w.getUniqueDynObject();
 		
 		for (UniqueDynamicObject a : listeAgents){
-			if (a instanceof Requin){
+			if (a instanceof Requin || a instanceof Humain){
 				if (a.getX() == this.getX() && a.getY() == this.getY() ){
-					System.out.println("Poisson a été mangé Requin");
 					this.mort();
 				}
 			}
@@ -33,7 +32,6 @@ public class Poisson extends Prey{
 		for (UniqueDynamicObject a : listeAgents){
 			if (a instanceof Poisson){
 				if (a.getX() == this.getX() && a.getY() == this.getY() && this.male != ((Poisson) a).male){
-					System.out.println("Deux poissons en ["+this.getX()+", "+this.getY()+"] ; \t nb_tour = "+nb_tour);
 					nb_tour++;
 				}
 			
@@ -50,7 +48,7 @@ public class Poisson extends Prey{
 	public void deplacement() {
 		int maxWidth = super.world.getWidth();
 		int maxHeight = super.world.getHeight();
-		Agent voisin = this.PlusProcheVoisin(20, super.world);
+		Agent voisin = this.PlusProcheVoisin(5, super.world);
 		this.chasse(super.world);
 		this.reproduction(super.world);
 		
